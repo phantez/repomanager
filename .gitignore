@@ -7,3 +7,6 @@ syntax: glob
 *-info/
 build/*
 dist/*
+.hg/*
+.hgignore
+*.dat
