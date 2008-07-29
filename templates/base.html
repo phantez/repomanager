@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>{% block title %}{% endblock %} - RepoManager</title>
+</head>
+
+<body>
+<div class="container">
+    <div id="login-info">
+        {% if user.is_authenticated %}
+            You are logged in as <b>{{user.username}}</b>.<br />
+            <a href="/accounts/profile/">Profile</a> | <a href="/accounts/change_password/">Change Password</a> | <a href="/accounts/logout/">Logout</a>
+        {% else %}
+            <a href="/accounts/login/">Login</a>
+        {% endif %}
+    </div>
+
+    </div>
+    <div>
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>

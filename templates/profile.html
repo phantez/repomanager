@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Profile for {{request.user.username}}{% endblock %}
+
+{% block content %}
+
+<div id="display-profile" class="span-8 box">
+<dl>
+    <dt>Username:</dt>
+        <dd>{{user.username}}</dd>
+    <dt>"Real" name:</dt>
+        <dd>{% if user.get_full_name %}{{user.get_full_name}}{% else %}{{user.id}}{%endif%}</dd>
+    <dt>Email address:</dt>
+        <dd>{% if user.email %}{{user.email}}{%else%}{%endif%}</dd>
+</dl>
+</div>
+
+<div id="change-profile" class=" span-8 align-form box">
+<form method="post" action=".">
+{{form.as_p}}
+<input type="submit" value="Update Profile"/>
+</form>
+</div>
+
+{% endblock %}

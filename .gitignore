@@ -1,0 +1,9 @@
+syntax: glob
+.svn/*
+*.pyc
+*.~
+*~
+.#*
+*-info/
+build/*
+dist/*
