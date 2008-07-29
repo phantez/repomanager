@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Example:
     # (r'^repomanager/', include('repomanager.foo.urls')),
+    (r'^$', 'repomanager.repos.views.frontpage'),
 
     # repos
     (r'^repos/$', 'repomanager.repos.views.frontpage'),
