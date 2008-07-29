@@ -2,13 +2,16 @@ from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
     # (r'^repomanager/', include('repomanager.foo.urls')),
 
+    # repos
+    (r'^repos/$', 'repomanager.repos.views.frontpage'),
+    (r'^repos/manage/$', 'repomanager.repos.views.manage'),
     # accounts
     (r'^accounts/$', 'repomanager.accountsviews.frontpage'),
     (r'^accounts/profile/$', 'repomanager.accountsviews.profile'),
@@ -18,10 +21,10 @@ urlpatterns = patterns('',
     (r'^accounts/change_password/done/$','django.contrib.auth.views.password_change_done'),
 
     # Uncomment the next line to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line for to enable the admin:
-    # (r'^admin/(.*)', admin.site.root),
+    (r'^admin/(.*)', admin.site.root),
 
     (r'^tos/', direct_to_template, {'template':'tos.html'}),
     (r'^about/', direct_to_template, {'template':'about.html'}),

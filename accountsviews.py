@@ -27,10 +27,8 @@ def profile(request):
     return render_to_response('profile.html', dict(form=form), context_instance=RequestContext(request))
 
 def frontpage(request):
-
     if request.user.is_authenticated():
         new_account_form = login_form = None
-
     else:
         post_names = set(n for n,v in request.POST.items() if v)
         if post_names.intersection(('newaccount', 'new-username',
@@ -39,7 +37,7 @@ def frontpage(request):
             if new_account_form.is_valid():
                 user = User.objects.create_user(
                         new_account_form.cleaned_data['username'],
-                        '',
+                        '', # email
                         new_account_form.cleaned_data['password1'])
                 user.save()
                 user = authenticate(
@@ -65,5 +63,4 @@ def frontpage(request):
             login_form=login_form,
         ), context_instance=RequestContext(request)
     )
-
 
