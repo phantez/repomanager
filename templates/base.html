@@ -5,21 +5,22 @@
 </head>
 
 <body>
-<div class="container">
-    <div id="login-info">
-        {% if user.is_authenticated %}
-            You are logged in as <b>{{user.username}}</b>.<br />
-            <a href="/accounts/profile/">Profile</a> | <a href="/accounts/change_password/">Change Password</a> | <a href="/accounts/logout/">Logout</a>
-        {% else %}
-            <a href="/accounts/login/">Login</a>
-        {% endif %}
-    </div>
+    <div class="container">
+        <div id="login-info">
+            {% if user.is_authenticated %}
+                You are logged in as <b>{{user.username}}</b>.<br />
+                <a href="/accounts/profile/">Profile</a> | <a href="/accounts/change_password/">Change Password</a> | <a href="/accounts/logout/">Logout</a>
+            {% else %}
+                <a href="/accounts/login/">Login</a>
+            {% endif %}
+        </div>
 
+        </div>
+        <div>
+            {% block content %}
+            {% endblock %}
+        </div>
+    <p><a href="/accounts/">Back to the homepage.</a></p>
     </div>
-    <div>
-        {% block content %}
-        {% endblock %}
-    </div>
-</div>
 </body>
 </html>

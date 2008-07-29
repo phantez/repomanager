@@ -1,8 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django import newforms as forms
+
+from repomanager.accountsform import NewAccountForm, LoginForm
 
 @login_required
 def profile(request):
@@ -23,15 +26,44 @@ def profile(request):
                 email=user.email))
     return render_to_response('profile.html', dict(form=form), context_instance=RequestContext(request))
 
-class ChangeProfileForm(forms.Form):
-    # clean data get from post
-    first_name = forms.CharField(max_length=30, required=False)
-    last_name = forms.CharField(max_length=30, required=False)
-    email = forms.EmailField(required=False)
+def frontpage(request):
 
-    def update_user(self, user):
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
-        user.email = self.cleaned_data['email']
+    if request.user.is_authenticated():
+        new_account_form = login_form = None
+
+    else:
+        post_names = set(n for n,v in request.POST.items() if v)
+        if post_names.intersection(('newaccount', 'new-username',
+                    'new-password1', 'new-password2')):
+            new_account_form = NewAccountForm(request.POST, prefix='new')
+            if new_account_form.is_valid():
+                user = User.objects.create_user(
+                        new_account_form.cleaned_data['username'],
+                        '',
+                        new_account_form.cleaned_data['password1'])
+                user.save()
+                user = authenticate(
+                        username=new_account_form.cleaned_data['username'],
+                        password=new_account_form.cleaned_data['password1'])
+                login(request, user)
+                user.message_set.create(message=
+                        "Your account has been created.")
+        else:
+            new_account_form = NewAccountForm(prefix='new')
+        if post_names.intersection(('username', 'password')):
+            login_form = LoginForm(request.POST)
+            if login_form.is_valid():
+                user = login_form.user
+                login(request, user)
+                user.message_set.create(message="You have been logged in.")
+        else:
+            login_form = LoginForm()
+
+    return render_to_response('frontpage.html',
+        dict(
+            new_account_form=new_account_form,
+            login_form=login_form,
+        ), context_instance=RequestContext(request)
+    )
 
 

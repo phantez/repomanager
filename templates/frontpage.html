@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Mercurial Hosting{% endblock %}
+
+{% block content %}
+
+<div class="span-14 border">
+
+<form action='.' method='post'>
+
+    {% if not user.is_authenticated %}
+    <div class="span-7 border">
+        <fieldset>
+        <legend>Login:</legend>
+        {% for field in login_form %}
+            <div class="form-row {%if field.field.required %}required{%endif%} {%if field.errors%}errors{%endif%}">
+                {% if field.errors %}{{field.errors}}{% endif %}
+                <p>
+                {{field.label_tag}}<br />
+                {{field}}</p>
+            </div>
+        {% endfor %}
+        <input type='submit' name='login' value='Login' />
+        </fieldset>
+    </div>
+    <div class="span-7 last">
+        <fieldset>
+        <legend>... or create an account:</legend>
+        {% for field in new_account_form %}
+            {% ifnotequal field.name "tos" %}
+                <div class="form-row {%if field.field.required %}required{%endif%} {%if field.errors%}errors{%endif%}">
+                    {% if field.errors %}{{field.errors}}{% endif %}
+                    <p>
+                    {{field.label_tag}}<br />
+                    {{field}}</p>
+                </div>
+            {% endifnotequal %}
+        {% endfor %}
+        <div class="form-row required">
+            {% if new_account_form.tos.errors %}{{new_account_form.tos.errors}}{% endif %}
+            <p>{{new_account_form.tos}} I agree to the <a href="/tos/">Terms of Service</a>.</p>
+        </div>
+        <input type='submit' name='newaccount'  value='Create new account' />
+        </fieldset>
+    </div>
+{% endif %}
+</form>
+</div>
+
+{% endblock %}

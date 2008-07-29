@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.views.generic.simple import direct_to_template
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -8,9 +9,8 @@ urlpatterns = patterns('',
     # Example:
     # (r'^repomanager/', include('repomanager.foo.urls')),
 
-#    (r'^$', 'repomanager.repos.views.frontpage'),
-
     # accounts
+    (r'^accounts/$', 'repomanager.accountsviews.frontpage'),
     (r'^accounts/profile/$', 'repomanager.accountsviews.profile'),
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
@@ -22,5 +22,8 @@ urlpatterns = patterns('',
 
     # Uncomment the next line for to enable the admin:
     # (r'^admin/(.*)', admin.site.root),
+
+    (r'^tos/', direct_to_template, {'template':'tos.html'}),
+    (r'^about/', direct_to_template, {'template':'about.html'}),
 
 )
