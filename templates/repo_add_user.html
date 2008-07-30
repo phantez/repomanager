@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Repository Manager{% endblock %}
+
+{% block content %}
+
+<div class="span-14 border">
+
+<form action='.' method='post'>
+
+    {% if user.is_authenticated %}
+    <div class="span-7 last">
+        <fieldset>
+        <legend>Add a user to a repository :</legend>
+        {{user_form.as_p}}
+        {{repo_form.as_p}}
+        <input type='submit' name='adduser'  value='Add user to repository' />
+        </fieldset>
+    </div>
+    {% endif %}
+</form>
+
+</div>
+
+{% endblock %}

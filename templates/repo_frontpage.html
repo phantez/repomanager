@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Repository Manager{% endblock %}
+
+{% block content %}
+
+<div class="span-14 border">
+
+
+{% if user.is_authenticated %}
+<div class="span-7 last">
+    <ul>
+        <li><a href="/repos/create/">Create a repository</a></li>
+        <li><a href="/repos/delete/">Delete a repository</a></li>
+        <li><a href="/repos/adduser/">Add user to a repository</a></li>
+        <li><a href="/repos/deluser/">Del user to a repository</a></li>
+    <ul>
+</div>
+{% endif %}
+
+</div>
+
+{% endblock %}
