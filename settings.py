@@ -69,6 +69,9 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'repomanager.urls'
 
+HTPASSWD_PATH = '/home/steph/projets/repos/htpasswd'
+HG_REPOS_PATH = '/home/steph/projets/repos/hgrepos/'
+
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.

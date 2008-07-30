@@ -1,0 +1,10 @@
+[web]
+push_ssl = {{ push_ssl }}
+allow_push = {{ allow_push }}
+name = {{ name }}
+contact =  {{ contact }}
+description = {{ description }}
+
+[web]
+style = gitweb
+

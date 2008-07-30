@@ -8,7 +8,6 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django import forms
 
-
 def frontpage(request):
     if request.user.is_authenticated():
         return render_to_response('repo_frontpage.html', dict(), context_instance=RequestContext(request))
@@ -25,6 +24,7 @@ def create(request):
         repo_form.is_valid()
         if repo_form.clean() :
             repo = repo_form.create_repo(user) # FIXME : handle sql 
+            repo.update()
             repo.save()
             return HttpResponseRedirect("/repos/")
         return render_to_response('repo_create.html', dict(repo_form=repo_form), context_instance=RequestContext(request))
@@ -47,6 +47,7 @@ def delete(request):
         if repo_form.is_valid() :
             reponame=repo_form.cleaned_data['reponame']
             repo = Repo.objects.get(name=reponame[0]) # FIXME : handle sql 
+            repo.delete_repo()
             repo.delete()
             return HttpResponseRedirect("/repos/")
         return render_to_response('repo_delete.html', dict(repo_form=repo_form), context_instance=RequestContext(request))
@@ -76,6 +77,7 @@ def adduser(request):
             user_to_add = User.objects.get(username=username[0]) # FIXME : handle sql 
             repo = Repo.objects.get(name=reponame[0]) # FIXME : handle sql 
             repo.allow_push.add(user_to_add) # FIXME : handle sql 
+            repo.update()
             repo.save()
             return HttpResponseRedirect("/repos/")
         return render_to_response('repo_add_user.html', dict(user_form=user_form, repo_form=repo_form), context_instance=RequestContext(request))
@@ -106,6 +108,7 @@ def deluser(request):
             user_to_remove = User.objects.get(username=username[0]) # FIXME : handle sql 
             repo = Repo.objects.get(name=reponame[0]) # FIXME : handle sql 
             repo.allow_push.remove(user_to_remove) # FIXME : handle sql 
+            repo.update()
             repo.save()
             return HttpResponseRedirect("/repos/")
         return render_to_response('repo_del_user.html', dict(user_form=user_form, repo_form=repo_form), context_instance=RequestContext(request))

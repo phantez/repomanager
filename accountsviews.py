@@ -4,6 +4,8 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
+from django.template.loader import render_to_string
+from django.conf import settings
 
 from repomanager.accountsform import NewAccountForm, LoginForm, ChangeProfileForm
 
@@ -40,6 +42,7 @@ def frontpage(request):
                         '', # email
                         new_account_form.cleaned_data['password1'])
                 user.save()
+                update_htaccess() # update the htaccess file
                 user = authenticate(
                         username=new_account_form.cleaned_data['username'],
                         password=new_account_form.cleaned_data['password1'])
@@ -63,4 +66,13 @@ def frontpage(request):
             login_form=login_form,
         ), context_instance=RequestContext(request)
     )
+
+
+def update_htaccess():
+    f = open(settings.HTPASSWD_PATH, 'w')
+    users = User.objects.all()
+    c = dict({
+        'users' : users,
+        })
+    f.write(render_to_string('htpasswd',c))
 
