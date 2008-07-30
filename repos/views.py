@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
+
 def frontpage(request):
     if request.user.is_authenticated():
         return render_to_response('repo_frontpage.html', dict(), context_instance=RequestContext(request))
@@ -40,7 +41,7 @@ def delete(request):
         repo_form = RepositoryForm(request.POST)
         if repo_form.is_valid() :
             reponame=repo_form.cleaned_data['reponame']
-            repo = Repo.objects.get(name=reponame) # FIXME : handle sql 
+            repo = Repo.objects.get(name=reponame[0]) # FIXME : handle sql 
             repo.delete()
             return HttpResponseRedirect("/repos/")
         return render_to_response('repo_delete.html', dict(repo_form=repo_form), context_instance=RequestContext(request))
@@ -57,13 +58,14 @@ def adduser(request):
         # add user to repository
         user_form = UserForm(request.POST)
         repo_form = RepositoryForm(request.POST)
-        if user_form.is_valid() :
+        if user_form.is_valid() and repo_form.is_valid() :
             username=user_form.cleaned_data['username']
             reponame=repo_form.cleaned_data['reponame']
-            user_to_add = User.objects.get(username=username) # FIXME : handle sql 
-            repo = Repo.objects.get(name=reponame) # FIXME : handle sql 
+            user_to_add = User.objects.get(username=username[0]) # FIXME : handle sql 
+            repo = Repo.objects.get(name=reponame[0]) # FIXME : handle sql 
             repo.allow_push.add(user_to_add) # FIXME : handle sql 
             repo.save()
+            return HttpResponseRedirect("/repos/")
         return render_to_response('repo_add_user.html', dict(user_form=user_form, repo_form=repo_form), context_instance=RequestContext(request))
     else :
         # view repository
@@ -79,13 +81,14 @@ def deluser(request):
         # delete repository
         user_form = UserForm(request.POST)
         repo_form = RepositoryForm(request.POST)
-        if user_form.is_valid() :
+        if user_form.is_valid() and repo_form.is_valid() :
             username=user_form.cleaned_data['username']
             reponame=repo_form.cleaned_data['reponame']
-            user_to_remove = User.objects.get(username=username) # FIXME : handle sql 
-            repo = Repo.objects.get(name=reponame) # FIXME : handle sql 
+            user_to_remove = User.objects.get(username=username[0]) # FIXME : handle sql 
+            repo = Repo.objects.get(name=reponame[0]) # FIXME : handle sql 
             repo.allow_push.remove(user_to_remove) # FIXME : handle sql 
             repo.save()
+            return HttpResponseRedirect("/repos/")
         return render_to_response('repo_del_user.html', dict(user_form=user_form, repo_form=repo_form), context_instance=RequestContext(request))
     else :
         # view repository
