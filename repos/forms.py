@@ -28,30 +28,3 @@ class NewRepositoryForm(forms.Form):
                 long_name=self.cleaned_data['long_name'],
                 description=self.cleaned_data['description'])
 
-def get_users_names():
-    users = []
-    for n in User.objects.all() :
-        users.append((n.username, n.username))
-    return users
-
-def get_repos_names():
-    repos = []
-    for r in Repo.objects.all() :
-        repos.append((r.name, r.name))
-    return repos
-
-class oldRepositoryForm(forms.Form):
-    reponame = forms.MultipleChoiceField([(r.name, r.name) for r in Repo.objects.all()])
-
-class oldUserForm(forms.Form):
-    username = forms.MultipleChoiceField([(n.username, n.username) for n in User.objects.all()])
-
-class RepositoryForm(forms.Form):
-    reponame = forms.MultipleChoiceField(get_repos_names())
-
-class UserForm(forms.Form):
-    username = forms.MultipleChoiceField(get_users_names())
-
-
-
-

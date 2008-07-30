@@ -1,11 +1,12 @@
 from repomanager.repos.models import Repo
-from repomanager.repos.forms import NewRepositoryForm, UserForm, RepositoryForm
+from repomanager.repos.forms import NewRepositoryForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
+from django import forms
 
 
 def frontpage(request):
@@ -34,6 +35,10 @@ def create(request):
 
 @login_required
 def delete(request):
+
+    class RepositoryForm(forms.Form):
+        reponame = forms.MultipleChoiceField([(r.name, r.name) for r in Repo.objects.all()])
+
     user = request.user
     post_names = set(n for n,v in request.POST.items() if v)
     if post_names.intersection(('createrepository', 'reponame')) :
@@ -52,6 +57,13 @@ def delete(request):
 
 @login_required
 def adduser(request):
+
+    class RepositoryForm(forms.Form):
+        reponame = forms.MultipleChoiceField([(r.name, r.name) for r in Repo.objects.all()])
+
+    class UserForm(forms.Form):
+        username = forms.MultipleChoiceField([(n.username, n.username) for n in User.objects.all()])
+
     user = request.user
     post_names = set(n for n,v in request.POST.items() if v)
     if post_names.intersection(('adduser', 'reponame', 'username')) :
@@ -75,6 +87,13 @@ def adduser(request):
 
 @login_required
 def deluser(request):
+
+    class RepositoryForm(forms.Form):
+        reponame = forms.MultipleChoiceField([(r.name, r.name) for r in Repo.objects.all()])
+
+    class UserForm(forms.Form):
+        username = forms.MultipleChoiceField([(n.username, n.username) for n in User.objects.all()])
+
     user = request.user
     post_names = set(n for n,v in request.POST.items() if v)
     if post_names.intersection(('deluser', 'reponame', 'username')) :
