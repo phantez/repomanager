@@ -1,49 +1,95 @@
+from repomanager.repos.models import Repo
+from repomanager.repos.forms import NewRepositoryForm, UserForm, RepositoryForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django import newforms as forms
 
 def frontpage(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect("/repos/manage/")
+        return render_to_response('repo_frontpage.html', dict(), context_instance=RequestContext(request))
     else:
         return HttpResponseRedirect("/accounts/")
 
 @login_required
-def manage(request):
+def create(request):
     user = request.user
-    form = dict(
-            new_repository_form=NewRepositoryForm(),
-        )
-        
     post_names = set(n for n,v in request.POST.items() if v)
-    if post_names.intersection(('createrepository', 'name')) :
+    if post_names.intersection(('createrepository', 'reponame')) :
         # create repository
-        return render_to_response('repo_frontpage.html', dict(form=form), context_instance=RequestContext(request))
-    elif post_names.intersection(('deleterepository', 'name')) :
-        # delete repository
-        return render_to_response('repo_frontpage.html', dict(form=form), context_instance=RequestContext(request))
-    elif post_names.intersection(('addusertorepository', 'username', 'userpassword')) :
-        # add user to repository
-        return render_to_response('repo_frontpage.html', dict(form=form), context_instance=RequestContext(request))
-    elif post_names.intersection(('deleteusertorepository', 'username')) :
-        # delete user from repository
-        return render_to_response('repo_frontpage.html', dict(form=form), context_instance=RequestContext(request))
+        repo_form = NewRepositoryForm(request.POST)
+        repo_form.is_valid()
+        if repo_form.clean() :
+            repo = repo_form.create_repo(user) # FIXME : handle sql 
+            repo.save()
+            return HttpResponseRedirect("/repos/")
+        return render_to_response('repo_create.html', dict(repo_form=repo_form), context_instance=RequestContext(request))
     else :
         # view repository
-        return render_to_response('repo_frontpage.html', dict(form=form), context_instance=RequestContext(request))
-    # view repository
-    return render_to_response('repo_frontpage.html', dict(form=form), context_instance=RequestContext(request))
+        repo_form=NewRepositoryForm()
+        return render_to_response('repo_create.html', dict(repo_form=repo_form), context_instance=RequestContext(request))
 
-required_dict = {'class': 'required text short'}
+@login_required
+def delete(request):
+    user = request.user
+    post_names = set(n for n,v in request.POST.items() if v)
+    if post_names.intersection(('createrepository', 'reponame')) :
+        # create repository
+        repo_form = RepositoryForm(request.POST)
+        if repo_form.is_valid() :
+            reponame=repo_form.cleaned_data['reponame']
+            repo = Repo.objects.get(name=reponame) # FIXME : handle sql 
+            repo.delete()
+            return HttpResponseRedirect("/repos/")
+        return render_to_response('repo_delete.html', dict(repo_form=repo_form), context_instance=RequestContext(request))
+    else :
+        # view repository
+        repo_form = RepositoryForm(request.POST)
+        return render_to_response('repo_delete.html', dict(repo_form=repo_form), context_instance=RequestContext(request))
 
-class NewRepositoryForm(forms.Form):
-    name = forms.CharField(max_length=30,
-                               widget=forms.TextInput(attrs=required_dict),
-                               label=u'name')
-    def clean(self):
-        return self.cleaned_data
+@login_required
+def adduser(request):
+    user = request.user
+    post_names = set(n for n,v in request.POST.items() if v)
+    if post_names.intersection(('adduser', 'reponame', 'username')) :
+        # add user to repository
+        user_form = UserForm(request.POST)
+        repo_form = RepositoryForm(request.POST)
+        if user_form.is_valid() :
+            username=user_form.cleaned_data['username']
+            reponame=repo_form.cleaned_data['reponame']
+            user_to_add = User.objects.get(username=username) # FIXME : handle sql 
+            repo = Repo.objects.get(name=reponame) # FIXME : handle sql 
+            repo.allow_push.add(user_to_add) # FIXME : handle sql 
+            repo.save()
+        return render_to_response('repo_add_user.html', dict(user_form=user_form, repo_form=repo_form), context_instance=RequestContext(request))
+    else :
+        # view repository
+        user_form = UserForm(request.POST)
+        repo_form = RepositoryForm(request.POST)
+        return render_to_response('repo_add_user.html', dict(user_form=user_form, repo_form=repo_form), context_instance=RequestContext(request))
+
+@login_required
+def deluser(request):
+    user = request.user
+    post_names = set(n for n,v in request.POST.items() if v)
+    if post_names.intersection(('deluser', 'reponame', 'username')) :
+        # delete repository
+        user_form = UserForm(request.POST)
+        repo_form = RepositoryForm(request.POST)
+        if user_form.is_valid() :
+            username=user_form.cleaned_data['username']
+            reponame=repo_form.cleaned_data['reponame']
+            user_to_remove = User.objects.get(username=username) # FIXME : handle sql 
+            repo = Repo.objects.get(name=reponame) # FIXME : handle sql 
+            repo.allow_push.remove(user_to_remove) # FIXME : handle sql 
+            repo.save()
+        return render_to_response('repo_del_user.html', dict(user_form=user_form, repo_form=repo_form), context_instance=RequestContext(request))
+    else :
+        # view repository
+        user_form = UserForm(request.POST)
+        repo_form = RepositoryForm(request.POST)
+        return render_to_response('repo_del_user.html', dict(user_form=user_form, repo_form=repo_form), context_instance=RequestContext(request))
 

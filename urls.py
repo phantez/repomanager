@@ -12,7 +12,10 @@ urlpatterns = patterns('',
 
     # repos
     (r'^repos/$', 'repomanager.repos.views.frontpage'),
-    (r'^repos/manage/$', 'repomanager.repos.views.manage'),
+    (r'^repos/adduser/$', 'repomanager.repos.views.adduser'),
+    (r'^repos/deluser/$', 'repomanager.repos.views.deluser'),
+    (r'^repos/create/$', 'repomanager.repos.views.create'),
+    (r'^repos/delete/$', 'repomanager.repos.views.delete'),
     # accounts
     (r'^accounts/$', 'repomanager.accountsviews.frontpage'),
     (r'^accounts/profile/$', 'repomanager.accountsviews.profile'),

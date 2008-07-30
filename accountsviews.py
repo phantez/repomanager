@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 
-from repomanager.accountsform import NewAccountForm, LoginForm
+from repomanager.accountsform import NewAccountForm, LoginForm, ChangeProfileForm
 
 @login_required
 def profile(request):

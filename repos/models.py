@@ -14,7 +14,7 @@ class RepoManager(models.Manager):
 
 class Repo(models.Model) :
 
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,unique=True)
 
     long_name = models.CharField(max_length=50, blank=True)
 
