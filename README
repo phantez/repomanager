@@ -1,0 +1,46 @@
+RepoManager
+===========
+
+This software is licensed under AGPL version 3. See file COPYING for details.
+
+(c) 2008 Stéphan Gorget
+Some portions of the code are inspired from freehg.org
+
+What is this?
+-------------
+
+This is a web-based software to manage git and mercurial configuration files.
+The aim is too provide a web-interface to manage git and mercurial repositories.
+
+
+Apache2 configuration
+~~~~~~~~~~~~~~~~~~~~~
+
+<VirtualHost *>
+    ServerName repomanager
+    ServerAdmin mail@mail.com
+    ScriptAliasMatch ^(.*) /home/steph/projets/repos/hgrepos/hgwebdir.cgi$1
+
+      <Directory "/home/steph/projets/repos/hgrepos/">
+        Order allow,deny
+        Allow from all
+        AllowOverride All
+        SetHandler None
+        Options ExecCGI
+        AddHandler cgi-script .cgi
+        AuthUserFile /home/steph/projets/repos/htpasswd
+        AuthGroupFile /dev/null
+        AuthName "Repo Manager"
+        AuthType Basic
+        <LimitExcept GET>
+        Require valid-user
+        </LimitExcept>
+      </Directory>
+</VirtualHost>
+
+
+Website
+-------
+
+http://home.gna.org/niepce/
+
