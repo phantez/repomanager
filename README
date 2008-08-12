@@ -1,10 +1,10 @@
 RepoManager
 ===========
 
-This software is licensed under AGPL version 3. See file COPYING for details.
-
+This software is licensed under AGPL version 3. See file COPYING.txt for details.
 (c) 2008 Stéphan Gorget
-Some portions of the code are inspired from freehg.org
+
+Some portions of the code are inspired from freehg.org (thanks matthew marshall)
 
 What is this?
 -------------
