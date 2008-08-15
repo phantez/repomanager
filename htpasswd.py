@@ -49,14 +49,14 @@ class Htpasswd(object):
         self.records[str(k)] = str(v)
 
     def close(self):
-        if not self.changed_keys: return
-        f = open(self.filename, 'w')
-        f.writelines("%s:{SHA}%s\n" % i for i in self.records.iteritems())
-        f.close()
+        if self.changed_keys:
+            f = open(self.filename, 'w')
+            f.writelines("%s:%s\n" % i for i in self.records.iteritems())
+            f.close()
 
 def update_password(username, raw_password):
     db = Htpasswd(settings.HTPASSWD_FILE, "c")
-    db[str(username)] = b64encode(sha.new(raw_password).digest())
+    db[str(username)] = "{SHA}"+b64encode(sha.new(raw_password).digest())
     db.close()
 
 def oveload_set_password():
