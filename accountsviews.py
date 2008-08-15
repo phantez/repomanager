@@ -61,7 +61,6 @@ def frontpage(request):
                         '', # email
                         new_account_form.cleaned_data['password1'])
                 user.save()
-#                update_htaccess() # update the htaccess file
                 user = authenticate(
                         username=new_account_form.cleaned_data['username'],
                         password=new_account_form.cleaned_data['password1'])
@@ -86,22 +85,6 @@ def frontpage(request):
         ), context_instance=RequestContext(request)
     )
 
-
-#def update_htaccess():
-#    f = open(settings.HTPASSWD_PATH, 'w')
-#    django_users = User.objects.all()
-#    users = []
-#    for u in django_users :
-#        username = str(u.username)
-#        algo, salt, hsh = u.password.upper().split('$')
-#        password = "{SHA}" + str(b64encode(b16decode(salt+hsh)))
-#        us = Users(username, password)
-#        users.append(us)
-#
-#    c = dict({
-#        'users' : users,
-#        })
-#    f.write(render_to_string('htpasswd',c))
 
 class Users :
     def __init__(self, username, password) :
