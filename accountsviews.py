@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of RepoManager Project
-#
-# Copyright (C) 2008 RepoManager Project
-#
-# See AUTHORS for more informations
+# Copyright (C) 2008 the RepoManager team, see AUTHORS for details
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -18,6 +15,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -27,7 +25,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.conf import settings
-
+from base64 import b16decode, b64encode
 from repomanager.accountsform import NewAccountForm, LoginForm, ChangeProfileForm
 
 @login_required
@@ -63,7 +61,7 @@ def frontpage(request):
                         '', # email
                         new_account_form.cleaned_data['password1'])
                 user.save()
-                update_htaccess() # update the htaccess file
+#                update_htaccess() # update the htaccess file
                 user = authenticate(
                         username=new_account_form.cleaned_data['username'],
                         password=new_account_form.cleaned_data['password1'])
@@ -89,11 +87,24 @@ def frontpage(request):
     )
 
 
-def update_htaccess():
-    f = open(settings.HTPASSWD_PATH, 'w')
-    users = User.objects.all()
-    c = dict({
-        'users' : users,
-        })
-    f.write(render_to_string('htpasswd',c))
+#def update_htaccess():
+#    f = open(settings.HTPASSWD_PATH, 'w')
+#    django_users = User.objects.all()
+#    users = []
+#    for u in django_users :
+#        username = str(u.username)
+#        algo, salt, hsh = u.password.upper().split('$')
+#        password = "{SHA}" + str(b64encode(b16decode(salt+hsh)))
+#        us = Users(username, password)
+#        users.append(us)
+#
+#    c = dict({
+#        'users' : users,
+#        })
+#    f.write(render_to_string('htpasswd',c))
+
+class Users :
+    def __init__(self, username, password) :
+        self.username = username
+        self.password = password
 
