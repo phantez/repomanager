@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+     ('Stephan Gorget', 'phantez@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -69,7 +69,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'repomanager.urls'
 
-HTPASSWD_PATH = '/home/steph/projets/repos/htpasswd'
+HTPASSWD_FILE = '/home/steph/projets/repos/htpasswd'
 HG_REPOS_PATH = '/home/steph/projets/repos/hgrepos/'
 
 TEMPLATE_DIRS = (

@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of RepoManager Project
-#
-# Copyright (C) 2008 RepoManager Project
-#
-# See AUTHORS for more informations
+# Copyright (C) 2008 the RepoManager team, see AUTHORS for details
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -18,9 +15,11 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 from django.conf.urls.defaults import *
 from django.views.generic.simple import direct_to_template
+
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -55,3 +54,7 @@ urlpatterns = patterns('',
     (r'^about/', direct_to_template, {'template':'about.html'}),
 
 )
+
+from repomanager.htpasswd import oveload_set_password
+oveload_set_password()
+
