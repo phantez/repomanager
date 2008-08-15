@@ -4,13 +4,13 @@ RepoManager
 This software is licensed under AGPL version 3. See file COPYING.txt for details.
 (c) 2008 Stéphan Gorget
 
-Some portions of the code are inspired from freehg.org (thanks matthew marshall)
+Some portions of the code are inspired from freehg.org (matthew marshall (c))
 
 What is this?
 -------------
 
-This is a web-based software to manage git and mercurial configuration files.
-The aim is too provide a web-interface to manage git and mercurial repositories.
+This is a web-based software to manage mercurial configuration files. The aim
+is too provide a web-interface to manage mercurial repositories.
 
 
 Apache2 configuration
