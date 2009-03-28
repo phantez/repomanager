@@ -10,7 +10,7 @@ What is this?
 -------------
 
 This is a web-based software to manage mercurial configuration files. The aim
-is too provide a web-interface to manage mercurial repositories.
+is to provide a web-interface to manage mercurial repositories.
 
 
 Apache2 configuration
@@ -42,5 +42,5 @@ Apache2 configuration
 Website
 -------
 
-http://home.gna.org/niepce/
+http://phantez.net
 
